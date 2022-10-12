@@ -99,7 +99,12 @@ outputs
 .RData
 .Ruserdata
 
+# Temporary data
+/datasets/**
+
 # Generated Output
 /report.html
 data/*
 figure/*
+
+

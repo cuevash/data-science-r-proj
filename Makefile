@@ -13,6 +13,9 @@ activate:
 initialize_git:
 	git init 
 
+install_libs:
+	Rscript install-libs.r	
+
 pull_data:
 	poetry run dvc pull
 

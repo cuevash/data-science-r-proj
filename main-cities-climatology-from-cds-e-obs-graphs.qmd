@@ -1,0 +1,574 @@
+---
+title: "Climate graphs generated with data from CDS - E-OBS datasets"
+date: '2023-09-24'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Setup 
+
+None
+
+## Libraries
+
+```{r echo=FALSE}
+if (!"conflicted" %in% installed.packages()) install.packages("conflicted")
+library(conflicted)
+
+if (!"styler" %in% installed.packages()) install.packages("styler")
+library(styler)
+
+library("ecmwfr")
+library(sf)
+library(ncdf4)
+
+if (!"tidyverse" %in% installed.packages()) install.packages("tidyverse")
+library(tidyverse)
+library(purrr)
+
+if (!"fs" %in% installed.packages()) install.packages("fs")
+library(fs)
+
+library(lubridate, warn.conflicts = FALSE)
+library(tidync)
+library(stars)
+
+if (!"maps" %in% installed.packages()) install.packages("maps")
+library(maps)
+
+if (!"ggmap" %in% installed.packages()) install.packages("ggmap")
+library(ggmap)
+
+if (!"mapview" %in% installed.packages()) install.packages("mapview")
+library(mapview)
+
+if (!"spData" %in% installed.packages()) install.packages("spData")
+library(spData)
+
+library(ggplot2)
+library(hrbrthemes)
+
+if (!"plotly" %in% installed.packages()) install.packages("plotly")
+library(plotly)
+if (!"gapminder" %in% installed.packages()) install.packages("gapminder")
+library(gapminder)
+
+if (!"ggtext" %in% installed.packages()) install.packages("ggtext")
+library(ggtext)
+
+
+if (!"svglite" %in% installed.packages()) install.packages("svglite")
+library(svglite)
+
+conflict_prefer("map", "purrr")
+conflict_prefer("filter", "dplyr")
+
+```
+
+## Getting Data
+
+We have generated the data from the CDS web site and store the results on the file -> See in code below
+
+## Loading data
+
+Reading data from ncdf file
+
+```{r echo=FALSE}
+# Reading Spanish cities data // With population > 30000. To get at least all the capitals of Spain
+cities_set_df <- read_csv("./datasets/worldcities.csv") |>
+  filter(iso2 == "ES", population > 30000, !is.na(capital) ) 
+
+cities_set_sf <- cities_set_df %>%
+  st_as_sf(coords = c("lng", "lat"), remove = FALSE)
+
+st_crs(cities_set_sf) <- 4326
+
+
+##### Climate Data CDS
+
+##### DATA - E-OBS ####
+
+## 1950 -2021
+climatologies_europe_eobs_1950_2021_nc <- tidync("./datasets/tg_ens_mean_0.1deg_reg_v25.0e.nc") 
+
+## 2022
+climatologies_europe_eobs_2022_nc <- tidync("./datasets/tg_0.1deg_day_2022_grid_ensmean.nc") 
+
+
+tt <- climatologies_europe_eobs_2022_nc |>
+  hyper_filter(time = index == 1) |>
+  hyper_tibble() 
+
+#lonlat_df <- climatologies_world_nc %>% hyper_filter(time = index == 1, latitude = latitude > 4 & latitude < 6, longitude = longitude > 4 & longitude < 6) %>% hyper_tibble()
+
+tt_super  <- climatologies_europe_eobs_1950_2021_nc |>
+  hyper_filter(time = index == 1) |>
+  hyper_tibble() 
+
+
+#######################################################################
+#
+# Build Climatology SPAIN From E-OBS - 1950 -2022
+#
+#######################################################################
+
+
+# Build sf for the lon/lat values
+lonlat_sf <- climatologies_europe_eobs_1950_2021_nc %>% 
+  hyper_filter(time = index == 1) %>% 
+  hyper_tibble() %>% 
+  select(longitude, latitude)  %>% 
+  st_as_sf(coords = c("longitude", "latitude"),remove = FALSE)
+  
+st_crs(lonlat_sf) <- 4326
+
+# Find out closest coordinates indexes
+nearest_coords <- st_nearest_feature(cities_set_sf, lonlat_sf)
+
+# Get the values and reverting the longitudes to the original format. Because we will use them to filter the # whole original file
+lon_lat_values <- lonlat_sf  |>  
+  slice(nearest_coords) |>
+  select(longitude,latitude) |> 
+  (\(x) list( lon = pull(x,longitude), lat = pull(x,latitude)))()
+  
+# Add closest coords in original format to our set of cities
+
+cities_set_ex_df <- add_column(cities_set_sf, lon_orig_eobs = lon_lat_values$lon, lat_orig_eobs = lon_lat_values$lat)
+
+
+get_time_slices_eobs_for_cities <- function(cities_set_ex_df, climatologies_eobs_nc) {
+#' Get time slices from the gridded climatologies netCDF file for the cties in cities_set
+#' 
+#' Return an sf with simple points for all the coordinates, and some merged info from the cities set  
+#'
+
+  climatology_cities_dat <- cities_set_ex_df$city |> 
+    map(function(city_name) {
+          lon = cities_set_ex_df |> filter(city == city_name) |> pull(lon_orig_eobs) 
+          lat = cities_set_ex_df |> filter(city == city_name) |> pull(lat_orig_eobs)
+          print(city_name)
+          climatologies_eobs_nc |> 
+            hyper_filter( longitude = between(longitude, lon - 0.01, lon + 0.01), latitude =  between(latitude, lat - 0.01, lat + 0.01)) |>
+            hyper_tibble() |>
+            add_column(city = city_name)
+        }) |>
+    bind_rows() |>
+    mutate(t2m_c = tg) |> 
+    mutate(date_time = as_datetime(c(time * 60 * 60 * 24), origin="1950-01-01")) |>
+    mutate(year = year(date_time)) |>
+    mutate(month = month(date_time)) |>
+    mutate(month_name = month(date_time, label = TRUE)) |>
+    mutate(decade = as.character(as.integer((year %/% 10) * 10))) |> # Add decade class
+    st_as_sf(coords = c("longitude", "latitude"),remove = FALSE)
+
+  st_crs(climatology_cities_dat) <- 4326
+  climatology_cities_dat
+}
+
+# 1950 - 2021
+climatologies_europe_eobs_1950_2021_dat <- 
+  get_time_slices_eobs_for_cities(cities_set_ex_df, climatologies_europe_eobs_1950_2021_nc) 
+
+# 2022
+climatologies_europe_eobs_2022_dat <- 
+  get_time_slices_eobs_for_cities(cities_set_ex_df, climatologies_europe_eobs_2022_nc) 
+
+# All Data together
+climatologies_europe_eobs_1950_2022_dat <- 
+  bind_rows(climatologies_europe_eobs_1950_2021_dat, climatologies_europe_eobs_2022_dat)
+
+aa <- climatologies_europe_eobs_2022_dat |> 
+  group_by(city) |>
+  summarise(n = n())
+
+bb <- climatologies_europe_eobs_2022_dat |> 
+  filter(city == "Alicante")
+
+##### OUTPUT PIPELINE 1
+dir_create(path("./pipeline"))
+write.csv(
+  climatologies_europe_eobs_1950_2022_dat, 
+  file = "./pipeline/climatologies_spain_cities_eobs_1950_2022_dat.csv",
+  row.names = FALSE
+)
+
+```
+
+## Pipeine 2 
+
+Reading data from pipeline 1
+
+```{r echo=FALSE}
+
+climatologies_europe_eobs_1950_2022_dat_tbbl <- read_csv("./pipeline/climatologies_spain_cities_eobs_1950_2022_dat.csv")
+   
+```
+
+Calculate some summaries over the whole dataset generated in pipeline1
+
+```{r echo=FALSE}
+
+## Add monthly mean temperature
+climatologies_europe_eobs_1950_2022_means_dat_tbbl <- climatologies_europe_eobs_1950_2022_dat_tbbl |>
+  group_by(city, year, month) |>
+  mutate(temp_month_mean = mean(t2m_c)) |>
+  ungroup() |> 
+  mutate(year = as.integer(year), month = as.integer(month))
+
+
+# Calculate BaseLine Mean Annual Temperature for each city (1990-2020) 
+tt <- climatologies_europe_eobs_1950_2022_means_dat_tbbl |> 
+  filter(year >= 2022, city =="Madrid") 
+   
+```
+
+## Plotting
+Tale of two Cities in July
+
+```{r}
+
+# Create out directories
+graph_out_dir <- "./out" 
+
+graph_main_dir <- "/cds_e_obs_spain_cities_story_of_two_cities_july"
+
+graph_main_dir_path <- path(graph_out_dir, graph_main_dir)
+
+graphs_svg_sub_dir_path = path(graph_main_dir_path, "/svg")
+
+graphs_plotly_sub_dir_path = path(graph_main_dir_path, "/plotly")
+
+dir_create(path(graphs_svg_sub_dir_path))
+dir_create(path(graphs_plotly_sub_dir_path))
+
+graphs_path_files = c()
+          
+#
+cities_in_study = c("Sevilla", "Burgos")
+month_in_study = 7
+
+year_in_middle = climatologies_europe_eobs_1950_2022_means_dat_tbbl |>
+  select(year) |>
+  unique() |>
+  arrange(year) |> 
+  {\(dat) round(median(dat$year))}()
+
+# Summarize by month and prepare Name of columns (for tooltips)
+climatologies_monthly_ext_dat <- climatologies_europe_eobs_1950_2022_dat_tbbl |>
+  group_by(city, year, month) |>
+  summarise(temp_month_mean = mean(t2m_c)) |>
+  ungroup() |>
+  mutate(City = city, Year = year, "Temp Avgr." = temp_month_mean )
+
+labels_dat <- cities_in_study |> map(function(city_name) {
+    climatologies_monthly_ext_dat |> 
+    filter(city == city_name, year == year_in_middle, month == month_in_study) |>
+    pull(temp_month_mean)
+  }) |> 
+  unlist() |>
+  (\(y_values) {
+    print(y_values)
+   tibble( city = cities_in_study, x = year_in_middle, y = y_values)
+})()
+
+
+story_of_two_cities_july_base_plot <- climatologies_monthly_ext_dat |>
+  filter(city %in% cities_in_study, month == 7) |>
+  ggplot(aes(x = Year, y = `Temp Avgr.`, group = City)) + 
+  theme(plot.title = element_text(size = 14)) +
+   labs(
+    x = "Year", 
+    y = "Average temperature Cº", 
+    title = "Average Temperature in July - Tale of two Cities? or the same story..",
+    caption = "Data from: CDS - ERA5 monthly averaged data on single levels from 1959 to present[1959-2022]"
+  )
+
+story_of_two_cities_july_plot = story_of_two_cities_july_base_plot +
+  geom_point() +
+  geom_line(stat = "identity") +
+  geom_smooth(method = "lm", se = FALSE)   +
+  geom_label(data = labels_dat, alpha = 0.75, inherit.aes = FALSE, aes(x, y, label = city))
+
+story_of_two_cities_july_plot
+
+# Save to svg
+svg_file_path <- path(graphs_svg_sub_dir_path, "/story_of_two_cities_july_plot", ext = "svg")
+svglite(svg_file_path)
+story_of_two_cities_july_plot
+invisible(
+      dev.off()
+)
+
+graphs_path_files <- c(graphs_path_files, svg_file_path)
+
+# Same graph interactive Plotly
+story_of_two_cities_july_plotly <- ggplotly(story_of_two_cities_july_plot) |> 
+  add_annotations(
+    x = labels_dat$x,
+    y = labels_dat$y,
+    text = labels_dat$city,
+    xref = "x",
+    yref = "y",
+    showarrow = TRUE,
+    arrowhead = 1,
+    arrowsize = 0.5,
+    arrowside = "none",
+    ax = 20,
+    ay = -40,
+    bgcolor="white",
+    opacity=0.8
+  )
+
+plotly_file_path <- path(graphs_plotly_sub_dir_path, "/story_of_two_cities_july_plot", ext = "html")
+htmlwidgets::saveWidget(
+  story_of_two_cities_july_plotly, 
+  plotly_file_path
+)
+
+story_of_two_cities_july_plotly
+
+graphs_path_files <- c(graphs_path_files, plotly_file_path)
+
+basename(plotly_file_path)
+
+#########################################
+#
+# Generate small html with links
+#
+#########################################
+
+
+html_graph_links <- graphs_path_files |> map(function(file_path) {
+  str_interp('<p><a href="${path_join(tail(path_split(file_path)[[1]], -3))}"> A graph</a></p>\n\n')
+  }) |> unlist() |> paste(collapse='\n')
+
+
+html_page = paste(
+  '
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Graphs</title>
+  </head>
+  <body>',
+  html_graph_links,
+'  </body>
+' , 
+  sep = "\n"
+)
+
+write_file(html_page, path(graph_main_dir_path, "/index", ext = "html"))
+
+
+```
+
+
+## Plotting
+Comparing Averages Temperatures in July From Decades of 1950 (1950 -1959) against last decade ( 2013 - 2022)
+
+```{r}
+
+## Function creating graph
+
+create_graph_compare_avrg_temperatures_from_two_decades <- function(climatologies_europe_eobs_1950_2022_dat_tbbl) {
+  
+  # Create out directories
+graph_out_dir <- "./out" 
+
+graph_main_dir <- "/cds_e_obs_spain_cities_story_of_two_cities_july"
+
+graph_main_dir_path <- path(graph_out_dir, graph_main_dir)
+
+graphs_svg_sub_dir_path = path(graph_main_dir_path, "/svg")
+
+graphs_plotly_sub_dir_path = path(graph_main_dir_path, "/plotly")
+
+dir_create(path(graphs_svg_sub_dir_path))
+dir_create(path(graphs_plotly_sub_dir_path))
+
+graphs_path_files = c()
+ 
+## PARAMETERS
+month_in_study = 7
+
+
+# Summarize by month and prepare Name of columns (for tooltips) 1950 - 1959
+climatologies_mean_monthly_decade_1950_11959 <- climatologies_europe_eobs_1950_2022_dat_tbbl |>
+  filter(year >= 1950 & year <= 1959) |>
+  group_by(city, month) |>
+  summarise(temp_mean_by_month_1950_1959 = mean(t2m_c)) |>
+  ungroup() # |>
+  # mutate(City = city, Year = year, "Temp Avgr." = temp_month_mean )
+
+climatologies_mean_monthly_decade_2013_2022 <- climatologies_europe_eobs_1950_2022_dat_tbbl |>
+  filter(year >= 2013 & year <= 2022) |>
+  group_by(city, month) |>
+  summarise(temp_mean_by_month_2013_2022 = mean(t2m_c)) |>
+  ungroup() # |>
+
+## Add differences by month
+climatologies_mean_diffs_between_decades_top_10 <-
+  left_join(
+    climatologies_mean_monthly_decade_1950_11959, 
+    climatologies_mean_monthly_decade_2013_2022, 
+    by = c("city", "month")
+  ) |>
+  mutate(diffs_between_decades = temp_mean_by_month_2013_2022 - temp_mean_by_month_1950_1959) |>
+  filter(month == month_in_study) |>
+  top_n(10, diffs_between_decades) |>
+  arrange(-diffs_between_decades)
+
+# Barplot
+climatologies_mean_diffs_between_decades_top_10 |>
+  mutate(name = fct_reorder(city, diffs_between_decades)) |>
+ggplot(aes(x=name, y=diffs_between_decades)) +
+  geom_bar(stat = "identity") +
+  coord_flip()
+
+
+# 
+# |>
+#   mutate(diffs_between_decades = temp_mean_by_month_2013_2022 - temp_mean_by_month_1950_1959) |>
+#   filter(month = month_in_study) 
+
+
+
+# view(climatologies_mean_monthly_decade_1950_11959)
+# 
+# #
+# cities_in_study = c("Sevilla", "Burgos")
+# month_in_study = 7
+# 
+# year_in_middle = climatologies_europe_eobs_1950_2022_means_dat_tbbl |>
+#   select(year) |>
+#   unique() |>
+#   arrange(year) |> 
+#   {\(dat) round(median(dat$year))}()
+# 
+# # Summarize by month and prepare Name of columns (for tooltips)
+# climatologies_monthly_ext_dat <- climatologies_europe_eobs_1950_2022_dat_tbbl |>
+#   group_by(city, year, month) |>
+#   summarise(temp_month_mean = mean(t2m_c)) |>
+#   ungroup() |>
+#   mutate(City = city, Year = year, "Temp Avgr." = temp_month_mean )
+# 
+# labels_dat <- cities_in_study |> map(function(city_name) {
+#     climatologies_monthly_ext_dat |> 
+#     filter(city == city_name, year == year_in_middle, month == month_in_study) |>
+#     pull(temp_month_mean)
+#   }) |> 
+#   unlist() |>
+#   (\(y_values) {
+#     print(y_values)
+#    tibble( city = cities_in_study, x = year_in_middle, y = y_values)
+# })()
+# 
+# 
+# story_of_two_cities_july_base_plot <- climatologies_monthly_ext_dat |>
+#   filter(city %in% cities_in_study, month == 7) |>
+#   ggplot(aes(x = Year, y = `Temp Avgr.`, group = City)) + 
+#   theme(plot.title = element_text(size = 14)) +
+#    labs(
+#     x = "Year", 
+#     y = "Average temperature Cº", 
+#     title = "Average Temperature in July - Tale of two Cities? or the same story..",
+#     caption = "Data from: CDS - ERA5 monthly averaged data on single levels from 1959 to present[1959-2022]"
+#   )
+# 
+# story_of_two_cities_july_plot = story_of_two_cities_july_base_plot +
+#   geom_point() +
+#   geom_line(stat = "identity") +
+#   geom_smooth(method = "lm", se = FALSE)   +
+#   geom_label(data = labels_dat, alpha = 0.75, inherit.aes = FALSE, aes(x, y, label = city))
+# 
+# story_of_two_cities_july_plot
+# 
+# # Save to svg
+# svg_file_path <- path(graphs_svg_sub_dir_path, "/story_of_two_cities_july_plot", ext = "svg")
+# svglite(svg_file_path)
+# story_of_two_cities_july_plot
+# invisible(
+#       dev.off()
+# )
+# 
+# graphs_path_files <- c(graphs_path_files, svg_file_path)
+# 
+# # Same graph interactive Plotly
+# story_of_two_cities_july_plotly <- ggplotly(story_of_two_cities_july_plot) |> 
+#   add_annotations(
+#     x = labels_dat$x,
+#     y = labels_dat$y,
+#     text = labels_dat$city,
+#     xref = "x",
+#     yref = "y",
+#     showarrow = TRUE,
+#     arrowhead = 1,
+#     arrowsize = 0.5,
+#     arrowside = "none",
+#     ax = 20,
+#     ay = -40,
+#     bgcolor="white",
+#     opacity=0.8
+#   )
+# 
+# plotly_file_path <- path(graphs_plotly_sub_dir_path, "/story_of_two_cities_july_plot", ext = "html")
+# htmlwidgets::saveWidget(
+#   story_of_two_cities_july_plotly, 
+#   plotly_file_path
+# )
+# 
+# story_of_two_cities_july_plotly
+# 
+# graphs_path_files <- c(graphs_path_files, plotly_file_path)
+# 
+# basename(plotly_file_path)
+# 
+# #########################################
+# #
+# # Generate small html with links
+# #
+# #########################################
+# 
+# 
+# html_graph_links <- graphs_path_files |> map(function(file_path) {
+#   str_interp('<p><a href="${path_join(tail(path_split(file_path)[[1]], -3))}"> A graph</a></p>\n\n')
+#   }) |> unlist() |> paste(collapse='\n')
+# 
+# 
+# html_page = paste(
+#   '
+# <!DOCTYPE html>
+# <html lang="en">
+#   <head>
+#     <meta charset="UTF-8">
+#     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+#     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+#     <title>Graphs</title>
+#   </head>
+#   <body>',
+#   html_graph_links,
+# '  </body>
+# ' , 
+#   sep = "\n"
+# )
+# 
+# write_file(html_page, path(graph_main_dir_path, "/index", ext = "html"))
+  
+}
+
+
+
+result <- create_graph_compare_avrg_temperatures_from_two_decades(climatologies_europe_eobs_1950_2022_means_dat_tbbl)
+
+
+result
+    
+
+```
+
+
