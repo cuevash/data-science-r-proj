@@ -13,8 +13,14 @@ activate:
 initialize_git:
 	git init 
 
+init_reset_r_env:
+	rm -rf ./renv
+	rm -f ./renv.lock
+	rm -f ./.Rprofile
+	Rscript ./init-renv.r
+
 install_libs:
-	Rscript install-libs.r	
+	Rscript ./install-libs.r	
 
 pull_data:
 	poetry run dvc pull
