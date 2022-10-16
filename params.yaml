@@ -5,16 +5,15 @@ set_up:
  # Parameters to setup the project
 
 data:
+  cities_csv: "data/raw/worldcities.csv"
   cds_e_obs_europe_0.1_v25.0e_netcdf: 'data/raw/tg_ens_mean_0.1deg_reg_v25.0e.nc'
   cds_e_obs_europe_0.1_2022_01_01__2022_07_31_netcdf: 'data/raw/tg_0.1deg_day_2022_grid_ensmean.nc'
-  
-  
+  plot_set_path: 'data/processed/climatologies_spain_cities_eobs_1950_2022_dat.csv'
   # dataset_csv: 'data/raw/iris.csv'
   # features_path: 'data/processed/featured_iris.csv'
   # test_size: 0.2
   # trainset_path: 'data/processed/train_iris.csv'
   # testset_path: 'data/processed/test_iris.csv'
-
 
 train:
   clf_params:

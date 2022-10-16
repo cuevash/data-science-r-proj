@@ -247,7 +247,7 @@ graphs_path_files = c()
           
 #
 cities_in_study = c("Sevilla", "Burgos")
-month_in_study = 7
+month_in_study = 7 # July
 
 year_in_middle = climatologies_europe_eobs_1950_2022_means_dat_tbbl |>
   select(year) |>

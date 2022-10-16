@@ -1,5 +1,20 @@
 project:
-  title: "quarto-101"
+  type: website
+  render:
+    - "*.qmd"
+
+website:
+  title: "Climatology Graphs"
+  navbar:
+    background: primary
+    left:
+      - href: climatology-web.qmd
+        text: Home
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
 
 editor: visual
 

@@ -1,0 +1,72 @@
+---
+title: "Climate graphs generated with data from CDS - E-OBS datasets"
+date: '2022-10-15'
+
+execute:
+  echo: false
+---
+
+## The times are changing..
+
+We all are aware of how the climate is changing but to have a better feeling of it closer to home lets run some experiments.
+
+Using climatology data grid from the CDS, mainly the data obtained in the dataset E-OBS, lets find out how has the weather changed aproximately over the last 50 years.
+
+A little disclaimer; the data is an aproximation from the gridded data obtained , it should be close to reality but it wont be perfect. For that a lot of fine tuning of data would be necessary. I may get the AEMET on board to help me woth that :-).
+
+Without more preamble here are the findings:
+
+```{r}
+#| label: load-packages
+
+import::from(here, here)
+import::from(sf, st_as_sf, st_nearest_feature, st_crs)
+import::from(readr, read_csv)
+import::from(dplyr, filter, mutate)
+
+import::from(data_process.r, data_process, .directory=here("src/stages/"))
+# import::from(plotting.r, plotting , .directory=here("src/stages/"))
+import::from(plot_story_of_two_cities_july_svg.r, generating_svg , .directory=here("src/modules/"))
+import::from(plot_story_of_two_cities_july_plotly.r, plotting_plotly , .directory=here("src/modules/"))
+```
+
+```{r}
+#| label: processing
+
+# data_process()
+
+```
+
+## Plotting
+
+```{r}
+#| label: plotting svg
+#| warning: false
+#| results: hide
+#| message: false
+#| fig.show: hide
+
+generating_svg()
+
+```
+
+![](out/cds_e_obs_spain_cities_story_of_two_cities_july.svg)
+
+```{r}
+#| label: plotting plotly
+#| warning: false
+#| results: hide
+#| message: false
+
+plot_plotly <- plotting_plotly()
+
+```
+
+```{r}
+#| label: plotting plotly graph
+#| warning: false
+#| message: false
+
+plot_plotly
+
+```

@@ -1,6 +1,8 @@
 if (!"conflicted" %in% installed.packages()) renv::install("conflicted")
 library(conflicted)
 
+if (!"here" %in% installed.packages()) renv::install("here")
+
 if (!"styler" %in% installed.packages()) renv::install("styler")
 library(styler)
 

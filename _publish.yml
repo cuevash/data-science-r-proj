@@ -1,0 +1,4 @@
+- source: project
+  netlify:
+    - id: f10dfb77-d6df-4000-aa8b-a2898af5fee0
+      url: 'https://flourishing-stroopwafel-556f62.netlify.app'
