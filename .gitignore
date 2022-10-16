@@ -107,4 +107,6 @@ outputs
 data/*
 figure/*
 
+/.quarto/
 
+/tmp
