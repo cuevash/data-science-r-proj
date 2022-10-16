@@ -1,4 +1,4 @@
 [core]
     remote = storage
 ['remote "storage"']
-    url = gdrive://data/cds-e-obs-files
+    url = gdrive://1S4gdn-gdLBsDQwR8KiyE43NGG3yNTKsL
