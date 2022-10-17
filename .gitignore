@@ -104,7 +104,6 @@ outputs
 
 # Generated Output
 /report.html
-data/*
 figure/*
 
 /.quarto/
