@@ -1,23 +1,22 @@
 stages:
-  process_data:
-    cmd: python src/process.py
+  prepare_points:
+    cmd: Rscript src/stages/prepare_points.R
     deps:
-    - config/main.yaml
-    - config/process
-    - data/raw
-    - src/process.py
+    - ${prepare_points.cities_in_file}
+    - src/prepare_points.R
     outs:
-    - data/processed:
+    - ${prepare_points.cities_out_file}:
         persist: true
-  train_model:
-    cmd: python src/train_model.py
-    deps:
-    - config/main.yaml
-    - config/model
-    - data/processed
-    - src/train_model.py
-    outs:
-    - data/final:
-        persist: true
-    - models:
-        persist: true
+
+  # train_model:
+  #   cmd: python src/train_model.py
+  #   deps:
+  #   - config/main.yaml
+  #   - config/model
+  #   - data/processed
+  #   - src/train_model.py
+  #   outs:
+  #   - data/final:
+  #       persist: true
+  #   - models:
+  #       persist: true

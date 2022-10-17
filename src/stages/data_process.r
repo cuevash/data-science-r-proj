@@ -9,7 +9,7 @@ import::here(read_csv,write_csv, .from = readr)
 import::here(process_e_obs.r, extract_sf_tibble_from_e_obs_for_coords, .directory=here("src/modules/"))
 import::here(dir_create, .from = fs)
 
-data_process <- function() {
+process <- function() {
   # Configuration
   config <- read_yaml(here("params.yaml"))
   print(config)

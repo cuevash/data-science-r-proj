@@ -1,6 +1,10 @@
 global:
  # global parameters
 
+prepare_points:
+    cities_in_file: "data/raw/worldcities.csv"
+    cities_out_file: "data/processed/worldcities.csv"
+
 set_up:
  # Parameters to setup the project
 
