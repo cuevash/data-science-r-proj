@@ -2,8 +2,15 @@ global:
  # global parameters
 
 prepare_points:
-    cities_in_file: "data/raw/worldcities.csv"
-    cities_out_file: "data/processed/worldcities.csv"
+  cities_in_file: "data/raw/worldcities.csv"
+  cities_out_file: "data/processed/worldcities.csv"
+
+process:
+  climatology_data: "data/processed/climatology_dat.csv"
+  # Main official data
+  main_e_obs_netcdf: 'remote-data/tg_ens_mean_0.1deg_reg_v25.0e.nc'
+  # Latest data not yet added to the official release
+  cds_e_obs_europe_01_2022_01_01__2022_07_31_netcdf: 'remote-data/tg_0.1deg_day_2022_grid_ensmean.nc'
 
 set_up:
  # Parameters to setup the project

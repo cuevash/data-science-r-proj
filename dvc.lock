@@ -13,3 +13,22 @@ stages:
     - path: data/processed/worldcities.csv
       md5: 98d6322d0391c6baf049bd86610e8bcc
       size: 148
+  process:
+    cmd: Rscript src/stages/process.R
+    deps:
+    - path: data/processed/worldcities.csv
+      md5: 98d6322d0391c6baf049bd86610e8bcc
+      size: 148
+    - path: remote-data/tg_0.1deg_day_2022_grid_ensmean.nc
+      md5: 37f499704c4bac26f8ea282c25c6c55a
+      size: 239362600
+    - path: remote-data/tg_ens_mean_0.1deg_reg_v25.0e.nc
+      md5: 8a527a2154f9567cd23c42e2a8a2cf22
+      size: 5310101909
+    - path: src/stages/process.R
+      md5: 2c3d33449161330cefaf33cfa93687b4
+      size: 1316
+    outs:
+    - path: data/processed/climatology_dat.csv
+      md5: 11489da6305aa2f1f5a66673e62da297
+      size: 4373446

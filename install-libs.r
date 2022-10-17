@@ -1,3 +1,5 @@
+if (!"import" %in% installed.packages()) renv::install("import")
+
 if (!"styler" %in% installed.packages()) renv::install("styler")
 
 # When installing the sf packagae I Get some errors..
@@ -46,5 +48,7 @@ if (!"ggtext" %in% installed.packages()) renv::install("ggtext")
 if (!"svglite" %in% installed.packages()) renv::install("svglite")
 
 if (!"yaml" %in% installed.packages()) renv::install("yaml@2.3.5")
+
+if (!"here" %in% installed.packages()) renv::install("here")
 
 renv::snapshot()

@@ -8,6 +8,17 @@ stages:
     - ${prepare_points.cities_out_file}:
         persist: true
 
+  process:
+    cmd: Rscript src/stages/process.R
+    deps:
+    - ${prepare_points.cities_out_file}
+    - ${process.main_e_obs_netcdf}
+    - ${process.cds_e_obs_europe_01_2022_01_01__2022_07_31_netcdf}
+    - src/stages/process.R
+    outs:
+    - ${process.climatology_data}:
+        persist: true
+
   # train_model:
   #   cmd: python src/train_model.py
   #   deps:
