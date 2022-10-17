@@ -3,7 +3,7 @@ stages:
     cmd: Rscript src/stages/prepare_points.R
     deps:
     - ${prepare_points.cities_in_file}
-    - src/prepare_points.R
+    - src/stages/prepare_points.R
     outs:
     - ${prepare_points.cities_out_file}:
         persist: true

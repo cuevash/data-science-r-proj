@@ -18,10 +18,13 @@ prepare_points <- function() {
   cities_df <- cities_df |>
     dplyr::filter(city == "Madrid") 
 
+  print(cities_df)
   # Out
   readr::write_csv(
     cities_df,
     file = here::here(config$prepare_points$cities_out_file)
   )
 }
+
+prepare_points()
 
