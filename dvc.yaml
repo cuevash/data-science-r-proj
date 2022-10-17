@@ -19,6 +19,26 @@ stages:
     - ${process.climatology_data}:
         persist: true
 
+  evaluate_2_cities_in_month:
+    cmd: Rscript src/stages/evaluate_2_cities_in_month.R
+    deps:
+    - ${process.climatology_data}
+    - src/stages/evaluate_2_cities_in_month.R
+    params:
+      - evaluate_2_cities_in_month.the_2_cities
+      - evaluate_2_cities_in_month.month
+    outs:
+    - ${evaluate_2_cities_in_month.out.graph_file_svg}:
+        persist: true
+    - ${evaluate_2_cities_in_month.out.graph_dir_plotly}:
+        persist: true
+    - ${evaluate_2_cities_in_month.out.graph_r_obj_plotly}:
+        persist: true
+
+        
+#  plot_2_cities_in_month:
+
+
   # train_model:
   #   cmd: python src/train_model.py
   #   deps:

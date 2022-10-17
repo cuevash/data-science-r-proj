@@ -37,22 +37,21 @@ lon_lat_values <- e_obs_lonlat_sf  |>
   dplyr::slice(nearest_coords) |>
   dplyr::select(longitude,latitude) |> 
   (\(x) list( lon = dplyr::pull(x,longitude), lat = dplyr::pull(x,latitude)))()
-  
+   
 # Add closest coords in original format to our set of cities
-
 coords_ex_sf <- tibble::add_column(coords_sf, lon_in_eobs = lon_lat_values$lon, lat_in_eobs = lon_lat_values$lat)
 
 # Extract all values for the exact coords choosen
 e_obs_processed_sf <- coords_ex_sf$id |> 
-    purrr::map(function(id) {
-          lon = coords_ex_sf |> dplyr::filter(id == id) |> dplyr::pull(lon_in_eobs) 
-          lat = coords_ex_sf |> dplyr::filter(id == id) |> dplyr::pull(lat_in_eobs)
-          print(id)
+    purrr::map(function(ele_id) {
+          lon = coords_ex_sf |> dplyr::filter(id == ele_id) |> dplyr::pull(lon_in_eobs) 
+          lat = coords_ex_sf |> dplyr::filter(id == ele_id) |> dplyr::pull(lat_in_eobs)
+          print(ele_id)
           e_obs_nc |> 
             # The values are to avoid errors of comparing exact real values.
-            tidync::hyper_filter( longitude = dplyr::between(longitude, lon - 0.01, lon + 0.01), latitude =  dplyr::between(latitude, lat - 0.01, lat + 0.01)) |>
+            tidync::hyper_filter( longitude = dplyr::between(longitude, lon - 0.001, lon + 0.001), latitude =  dplyr::between(latitude, lat - 0.001, lat + 0.001)) |>
             tidync::hyper_tibble() |>
-            tibble::add_column(id = id)
+            tibble::add_column(id = ele_id)
         }) |>
     dplyr::bind_rows() |>
     dplyr::mutate(t2m_c = tg) |> 

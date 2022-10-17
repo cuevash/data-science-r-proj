@@ -14,11 +14,6 @@ prepare_points <- function() {
     dplyr::filter(iso2 == "ES", population > 30000, !is.na(capital) ) |>
     dplyr::mutate(id = city)
 
-  # TODO: Remove once we have checked that the whole pipeline works.  
-  cities_df <- cities_df |>
-    dplyr::filter(city == "Madrid") 
-
-  print(cities_df)
   # Out
   readr::write_csv(
     cities_df,

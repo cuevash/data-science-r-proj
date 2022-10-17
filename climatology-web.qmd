@@ -16,99 +16,18 @@ A little disclaimer; the data is an aproximation from the gridded data obtained 
 
 Without more preamble here are the findings:
 
-```{r}
-#| label: load-packages
-
-import::from(here, here)
-import::from(sf, st_as_sf, st_nearest_feature, st_crs)
-import::from(readr, read_csv)
-import::from(dplyr, filter, mutate)
-
-import::from(data_process.r, data_process, .directory=here("src/stages/"))
-# import::from(plotting.r, plotting , .directory=here("src/stages/"))
-import::from(plot_story_of_two_cities_july_svg.r, generating_svg , .directory=here("src/modules/"))
-import::from(plot_story_of_two_cities_july_plotly.r, plotting_plotly , .directory=here("src/modules/"))
-```
-
-```{r}
-#| label: processing
-
-# data_process()
-
-```
-
 ## Plotting
-
-```{r}
-#| label: plotting svg
-#| warning: false
-#| results: hide
-#| message: false
-#| fig.show: hide
-
-generating_svg()
-
-```
 
 ![](out/cds_e_obs_spain_cities_story_of_two_cities_july.svg)
 
 ```{r}
 #| label: plotting plotly
 #| warning: false
-#| results: hide
 #| message: false
 
-plot_plotly <- plotting_plotly()
+# Configuration
+config <- yaml::read_yaml("params.yaml")
 
-```
-
-```{r}
-#| label: plotting plotly graph
-#| warning: false
-#| message: false
-
-plot_plotly
-
-```
-
-```{r}
-
-import::here(process_e_obs.r, extract_sf_tibble_from_e_obs_for_coords, .directory=here::here("src/modules/"))
-
-
-  # Configuration
-  config <- yaml::read_yaml(here::here("params.yaml"))
-  
-  # Cities as the locations to be explored
-  cities_sf <- readr::read_csv(here::here(config$prepare_points$cities_out_file)) |>
-    sf::st_as_sf(coords = c("lng", "lat"), remove = FALSE) |>
-    sf::st_set_crs(4326)
-
-  # E-OBS Latest official release
-  climatologies_europe_eobs_1950_2021_dat <- extract_sf_tibble_from_e_obs_for_coords(here::here(config$process$main_e_obs_netcdf), cities_sf)
-
-  # E-OBS data Latest data not yet in the official release
-  climatologies_europe_eobs_2022_dat <- extract_sf_tibble_from_e_obs_for_coords(here::here(config$process$cds_e_obs_europe_01_2022_01_01__2022_07_31_netcdf), cities_sf)
-
-  climatology_data: "data/processed/climatology_dat.csv"
-  # Main official data
-  main_e_obs_netcdf: 'data/raw/tg_ens_mean_0.1deg_reg_v25.0e.nc'
-  # Latest data not yet added to the official release
-  cds_e_obs_europe_0.1_2022_01_01__2022_07_31_netcdf: 'data/raw/tg_0.1deg_day_2022_grid_ensmean.nc'
-
-  # All Data together
-  climatologies_europe_eobs_1950_2022_dat <-
-    bind_rows(climatologies_europe_eobs_1950_2021_dat, climatologies_europe_eobs_2022_dat)
-
-print(climatologies_europe_eobs_1950_2022_dat)
-
-  ##### OUTPUT
-  # fs::dir_create(here::here(config$process$climatology_data))
-  readr::write_csv(
-    climatologies_europe_eobs_1950_2022_dat,
-    file = here::here(config$process$climatology_data)
-  )
-
-
+readRDS(config$evaluate_2_cities_in_month$out$graph_r_obj_plotly)
 ```
 

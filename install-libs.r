@@ -51,4 +51,6 @@ if (!"yaml" %in% installed.packages()) renv::install("yaml@2.3.5")
 
 if (!"here" %in% installed.packages()) renv::install("here")
 
+if (!"htmltools" %in% installed.packages()) renv::install("htmltools")
+
 renv::snapshot()

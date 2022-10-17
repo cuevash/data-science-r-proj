@@ -7,18 +7,18 @@ stages:
       md5: e3089bf39a26d571b3e3804937c8108e
       size: 4581116
     - path: src/stages/prepare_points.R
-      md5: d09f661628e83c75a2054cd3c23f13d0
-      size: 761
+      md5: e3ca069f5b4afa839c3052f119ea8f8a
+      size: 678
     outs:
     - path: data/processed/worldcities.csv
-      md5: 98d6322d0391c6baf049bd86610e8bcc
-      size: 148
+      md5: 605b6609653f8e9c88ace9dcdfc22cf3
+      size: 4203
   process:
     cmd: Rscript src/stages/process.R
     deps:
     - path: data/processed/worldcities.csv
-      md5: 98d6322d0391c6baf049bd86610e8bcc
-      size: 148
+      md5: cc5ab9d2f3ef2d28c50dd574ec6a8e70
+      size: 224
     - path: remote-data/tg_0.1deg_day_2022_grid_ensmean.nc
       md5: 37f499704c4bac26f8ea282c25c6c55a
       size: 239362600
@@ -30,5 +30,31 @@ stages:
       size: 1316
     outs:
     - path: data/processed/climatology_dat.csv
-      md5: 11489da6305aa2f1f5a66673e62da297
-      size: 4373446
+      md5: ddf2d5cdb7eb999b0b2c490fbbc4d005
+      size: 8835398
+  evaluate_2_cities_in_month:
+    cmd: Rscript src/stages/evaluate_2_cities_in_month.R
+    deps:
+    - path: data/processed/climatology_dat.csv
+      md5: ddf2d5cdb7eb999b0b2c490fbbc4d005
+      size: 8835398
+    - path: src/stages/evaluate_2_cities_in_month.R
+      md5: a06d5ceacb3aabed1c51de887378485b
+      size: 3666
+    params:
+      params.yaml:
+        evaluate_2_cities_in_month.month: 7
+        evaluate_2_cities_in_month.the_2_cities:
+        - Burgos
+        - Sevilla
+    outs:
+    - path: graphs/evaluate_2_cities_in_month.svg
+      md5: a31c8a3e41c421ac64efe50da843202b
+      size: 25446
+    - path: graphs/evaluate_2_cities_in_month_plotly
+      md5: e4d2767ccb1368145808025de0a7a057.dir
+      size: 4422406
+      nfiles: 17
+    - path: graphs/evaluate_2_cities_in_month_plotly.rds
+      md5: 2c6e0bebb93288c829fc5f303e968a0b
+      size: 839121
