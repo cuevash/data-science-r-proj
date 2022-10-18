@@ -6,7 +6,7 @@
   # Load data
   climatologies_europe_eobs_1950_2022_dat_tbbl <- readr::read_csv(here::here(config$process$climatology_data))
 
-  month_in_study = config$evaluate_2_cities_in_month$month
+  month_in_study = config$evaluate_decades_means$month
 
   # Summarize by month and prepare Name of columns (for tooltips) 1950 - 1959
   climatologies_mean_monthly_decade_1950_11959 <- climatologies_europe_eobs_1950_2022_dat_tbbl |>
@@ -31,8 +31,8 @@
     ) |>
     dplyr::mutate(diffs_between_decades = temp_mean_by_month_2013_2022 - temp_mean_by_month_1950_1959) |>
     dplyr::filter(month == month_in_study) |>
-    dplyr::top_n(10, diffs_between_decades) |>
-    dplyr::arrange(-diffs_between_decades)
+    dplyr::slice_max(diffs_between_decades, n = 10) |>
+    dplyr::arrange(diffs_between_decades)
 
   # Barplot
   plot <- climatologies_mean_diffs_between_decades_top_10 |>

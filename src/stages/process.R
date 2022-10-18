@@ -1,4 +1,4 @@
-import::here(process_e_obs.r, extract_sf_tibble_from_e_obs_for_coords, .directory=here::here("src/modules/"))
+import::here(process_e_obs.R, extract_sf_tibble_from_e_obs_for_coords, .directory=here::here("src/modules/"))
 
 process <- function() {
   # Configuration
@@ -18,9 +18,6 @@ process <- function() {
   # All Data together
   climatologies_europe_eobs_1950_2022_dat <-
     dplyr::bind_rows(climatologies_europe_eobs_1950_2021_dat, climatologies_europe_eobs_2022_dat)
-
-print(climatologies_europe_eobs_1950_2022_dat)
-print(here::here(config$process$climatology_data))
 
   ##### OUTPUT
   # fs::dir_create(here::here(config$process$climatology_data))

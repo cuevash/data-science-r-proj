@@ -4,6 +4,7 @@ global:
 prepare_points:
   cities_in_file: "data/raw/worldcities.csv"
   cities_out_file: "data/processed/worldcities.csv"
+  cities_exclude: ["Las Palmas", "Santa Cruz", "Cádiz"]
 
 process:
   climatology_data: "data/processed/climatology_dat.csv"
@@ -13,7 +14,6 @@ process:
   cds_e_obs_europe_01_2022_01_01__2022_07_31_netcdf: 'remote-data/tg_0.1deg_day_2022_grid_ensmean.nc'
 
 evaluate_2_cities_in_month:
-  evaluated_data: "data/evaluated/2_cities_in_month_evaluated_data.csv"
   the_2_cities: ["Burgos", "Sevilla"]
   month: 7
   out:
@@ -21,11 +21,27 @@ evaluate_2_cities_in_month:
     graph_dir_plotly: "graphs/evaluate_2_cities_in_month_plotly"
     graph_r_obj_plotly: "graphs/evaluate_2_cities_in_month_plotly.rds"
 
+evaluate_2_cities_in_month_1:
+  the_2_cities: ["Burgos", "Sevilla"]
+  month: 1
+  out:
+    graph_file_svg: "graphs/evaluate_2_cities_in_month_1.svg"
+    graph_dir_plotly: "graphs/evaluate_2_cities_in_month_1_plotly"
+    graph_r_obj_plotly: "graphs/evaluate_2_cities_in_month_1_plotly.rds"    
+
 evaluate_decades_means:
+  month: 7
   out:
     graph_file_svg: "graphs/evaluate_decades_means.svg"
     #graph_dir_plotly: "graphs/evaluate_decades_means_plotly"
     #graph_r_obj_plotly: "graphs/evaluate_decades_means.rds"    
+
+evaluate_decades_means_botton_10:
+  month: 7
+  out:
+    graph_file_svg: "graphs/evaluate_decades_means_botton_10.svg"
+    #graph_dir_plotly: "graphs/evaluate_decades_means_botton_10_plotly"
+    #graph_r_obj_plotly: "graphs/evaluate_decades_means_botton_10.rds"       
 
 generate_web:
   in:

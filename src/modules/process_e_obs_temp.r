@@ -14,7 +14,7 @@
 #'
 #' @md
 
-extract_sf_tibble_from_e_obs_for_coords <- function(file_name, coords_sf) {
+extract_sf_tibble_from_e_obs_for_coords2222 <- function(file_name, coords_sf) {
 
 # Info from file 
 e_obs_nc <- tidync::tidync(file_name) 

@@ -12,7 +12,8 @@ prepare_points <- function() {
   # Cities as the locations to be explored
   cities_df <- readr::read_csv(config$prepare_points$cities_in_file) |>
     dplyr::filter(iso2 == "ES", population > 30000, !is.na(capital) ) |>
-    dplyr::mutate(id = city)
+    dplyr::mutate(id = city) |>
+    dplyr::filter(!id %in%  config$prepare_points$cities_exclude)
 
   # Out
   readr::write_csv(

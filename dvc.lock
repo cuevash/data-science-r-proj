@@ -7,40 +7,49 @@ stages:
       md5: e3089bf39a26d571b3e3804937c8108e
       size: 4581116
     - path: src/stages/prepare_points.R
-      md5: b35bbe7ac0f959af66bbad4fc64eb6db
-      size: 605
+      md5: 2dbc086df618b36b1df706cf4e17a5fb
+      size: 674
+    params:
+      params.yaml:
+        prepare_points.cities_exclude:
+        - Las Palmas
+        - Santa Cruz
+        - Cádiz
     outs:
     - path: data/processed/worldcities.csv
-      md5: 605b6609653f8e9c88ace9dcdfc22cf3
-      size: 4203
+      md5: f930976671d21c1380c5a8fd37bf69be
+      size: 3952
   process:
     cmd: Rscript src/stages/process.R
     deps:
     - path: data/processed/worldcities.csv
-      md5: 605b6609653f8e9c88ace9dcdfc22cf3
-      size: 4203
+      md5: f930976671d21c1380c5a8fd37bf69be
+      size: 3952
     - path: remote-data/tg_0.1deg_day_2022_grid_ensmean.nc
       md5: 37f499704c4bac26f8ea282c25c6c55a
       size: 239362600
     - path: remote-data/tg_ens_mean_0.1deg_reg_v25.0e.nc
       md5: 8a527a2154f9567cd23c42e2a8a2cf22
       size: 5310101909
+    - path: src/modules/process_e_obs.R
+      md5: 747f3d7c19648ada1e6f01a55c7a058f
+      size: 3703
     - path: src/stages/process.R
-      md5: 2c3d33449161330cefaf33cfa93687b4
-      size: 1316
+      md5: 4733d243d26530fe0a64f6b833b55cd9
+      size: 1217
     outs:
     - path: data/processed/climatology_dat.csv
-      md5: c3280c82c5ef44f6f39c97390e216a00
-      size: 228394152
+      md5: 6d8d56726f772662df125f9b1b84c904
+      size: 217218809
   evaluate_2_cities_in_month:
     cmd: Rscript src/stages/evaluate_2_cities_in_month.R
     deps:
     - path: data/processed/climatology_dat.csv
-      md5: c3280c82c5ef44f6f39c97390e216a00
-      size: 228394152
+      md5: 6d8d56726f772662df125f9b1b84c904
+      size: 217218809
     - path: src/stages/evaluate_2_cities_in_month.R
-      md5: a06d5ceacb3aabed1c51de887378485b
-      size: 3666
+      md5: dd7241617e70df176e4b9717d6075b22
+      size: 3478
     params:
       params.yaml:
         evaluate_2_cities_in_month.month: 7
@@ -52,33 +61,90 @@ stages:
       md5: a31c8a3e41c421ac64efe50da843202b
       size: 25446
     - path: graphs/evaluate_2_cities_in_month_plotly
-      md5: 6d5a1cf58a52e681352bcc8a538bd8c1.dir
+      md5: 2aa1afdef4545c7270ac585c22c8d8e3.dir
       size: 4422410
       nfiles: 17
     - path: graphs/evaluate_2_cities_in_month_plotly.rds
-      md5: 83b67107ae3df9d2f8aea731d74ecaf1
-      size: 16497347
+      md5: f2248fc68be1841ad4dc663a41b01558
+      size: 15722941
   generate_web:
     cmd: quarto render climatology_web.qmd
     deps:
     - path: climatology_web.qmd
-      md5: fe02832537c9f3ba88df838f1fa621b1
-      size: 1128
+      md5: 721b1fbd332e40f7ab9930d9fac5dee2
+      size: 1475
+    - path: graphs/evaluate_2_cities_in_month.svg
+      md5: a31c8a3e41c421ac64efe50da843202b
+      size: 25446
+    - path: graphs/evaluate_2_cities_in_month_1.svg
+      md5: 8c35d53807f141eae8de508bc7bd9119
+      size: 25029
+    - path: graphs/evaluate_decades_means.svg
+      md5: a15902c582b532245409165d1d3ac7fe
+      size: 9610
+    - path: graphs/evaluate_decades_means_botton_10.svg
+      md5: 797960b7eb9dc4d5f74a305bc42a0fc4
+      size: 9016
     outs:
     - path: _site
-      md5: f9bde50ac3692efe78959bb11ef9fba1.dir
-      size: 5261632
-      nfiles: 36
+      md5: 0532ee0fca53b2eac5400e96bb792f36.dir
+      size: 5349470
+      nfiles: 39
   evaluate_decades_means:
     cmd: Rscript src/stages/evaluate_decades_means.R
     deps:
     - path: data/processed/climatology_dat.csv
-      md5: c3280c82c5ef44f6f39c97390e216a00
-      size: 228394152
+      md5: 6d8d56726f772662df125f9b1b84c904
+      size: 217218809
     - path: src/stages/evaluate_decades_means.R
-      md5: 0589556da8ea11c305fb7635b359f1b0
-      size: 2565
+      md5: df7e7a5e917dae601f17acb3c63758fb
+      size: 2568
+    params:
+      params.yaml:
+        evaluate_decades_means.month: 7
     outs:
     - path: graphs/evaluate_decades_means.svg
-      md5: a15902c582b532245409165d1d3ac7fe
+      md5: d16e8ce5f90f9f6562b50b68a1b5fee3
       size: 9610
+  evaluate_decades_means_botton_10:
+    cmd: Rscript src/stages/evaluate_decades_means_botton_10.R
+    deps:
+    - path: data/processed/climatology_dat.csv
+      md5: 6d8d56726f772662df125f9b1b84c904
+      size: 217218809
+    - path: src/stages/evaluate_decades_means_botton_10.R
+      md5: 1d45b411a72e63988fa2498cdb123aa3
+      size: 2745
+    params:
+      params.yaml:
+        evaluate_decades_means_botton_10.month: 7
+    outs:
+    - path: graphs/evaluate_decades_means_botton_10.svg
+      md5: 035bf2dc289f276cb64e3be631aeb8de
+      size: 9016
+  evaluate_2_cities_in_month_1:
+    cmd: Rscript src/stages/evaluate_2_cities_in_month_1.R
+    deps:
+    - path: data/processed/climatology_dat.csv
+      md5: 6d8d56726f772662df125f9b1b84c904
+      size: 217218809
+    - path: src/stages/evaluate_2_cities_in_month_1.R
+      md5: 70d89a36d08f4b4f7dc5c3218789abc1
+      size: 3567
+    params:
+      params.yaml:
+        evaluate_2_cities_in_month_1.month: 1
+        evaluate_2_cities_in_month_1.the_2_cities:
+        - Burgos
+        - Sevilla
+    outs:
+    - path: graphs/evaluate_2_cities_in_month_1.svg
+      md5: 8c35d53807f141eae8de508bc7bd9119
+      size: 25029
+    - path: graphs/evaluate_2_cities_in_month_1_plotly
+      md5: 0715eab86cb56668ca663f1f4aaac3c1.dir
+      size: 4423168
+      nfiles: 16
+    - path: graphs/evaluate_2_cities_in_month_1_plotly.rds
+      md5: 9aa84439fe7eafbf1d03e48cb0050bb6
+      size: 15722471

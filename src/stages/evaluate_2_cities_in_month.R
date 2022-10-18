@@ -51,7 +51,6 @@ evaluate_2_cities_in_month <- function() {
     ggplot2::geom_label(data = labels_dat, alpha = 0.75, inherit.aes = FALSE, ggplot2::aes(x, y, label = city))
 
   # Save to svg
-#  svg_file_path <- path(graphs_svg_sub_dir_path, "/story_of_two_cities_july_plot", ext = "svg")
   # Create dir if it does not exist
   dir.create(here::here(dirname(config$evaluate_2_cities_in_month$out$graph_file_svg)), showWarnings = FALSE, recursive = TRUE)
   
@@ -79,9 +78,9 @@ evaluate_2_cities_in_month <- function() {
       opacity=0.8
     )
 
-#  plotly_file_path <- path(graphs_plotly_sub_dir_path, "/story_of_two_cities_july_plot", ext = "html")
+  # Save plotly graph
   # Create dir if it does not exist
-  dir.create(here::here(dirname(config$evaluate_2_cities_in_month$out$graph_dir_plotly)), showWarnings = FALSE, recursive = TRUE)
+  dir.create(here::here(config$evaluate_2_cities_in_month$out$graph_dir_plotly), showWarnings = FALSE, recursive = TRUE)
   
   htmlwidgets::saveWidget(
     story_of_two_cities_july_plotly, 

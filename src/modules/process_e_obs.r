@@ -16,7 +16,6 @@
 #' @md
 
 extract_sf_tibble_from_e_obs_for_coords <- function(file_name, coords_sf) {
-
 # Info from file 
 e_obs_nc <- tidync::tidync(file_name) 
 
@@ -31,13 +30,12 @@ e_obs_lonlat_sf <-
 
 # Find out closest coordinates indexes
 nearest_coords <- sf::st_nearest_feature(coords_sf, e_obs_lonlat_sf)
-coords_in_range_mat <- sf::st_is_within_distance(coords_sf, e_obs_lonlat_sf, dist = 10000, sparse = FALSE)
-
+coords_in_range_mat <- sf::st_is_within_distance(coords_sf, e_obs_lonlat_sf, dist = 9000, sparse = FALSE)
 
 coords_in_range_tiible <- coords_in_range_mat |> 
   tibble::as_tibble() |>
   dplyr::rowwise()  |>
-  dplyr::summarise(n_in_range =  sum(c_across(where(is.logical))) )
+  dplyr::summarise(n_in_range = sum(dplyr::c_across(where(is.logical))) )
 
 coords_in_range_sf <- cbind(coords_sf, coords_in_range_tiible)
 
@@ -55,8 +53,7 @@ coords_ex_sf <- tibble::add_column(coords_in_range_sf, lon_in_eobs = lon_lat_val
 print("Warning: Out of range points!!")
 coords_ex_sf |>
   dplyr::filter(n_in_range < 1) |>
-  head() |>
-  print()
+  print(n=50)
 
 # Extract all values for the exact coords choosen
 e_obs_processed_sf <- coords_ex_sf$id |> 

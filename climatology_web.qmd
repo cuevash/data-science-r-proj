@@ -31,7 +31,7 @@ config <- yaml::read_yaml("params.yaml")
 ![](graphs/evaluate_2_cities_in_month.svg)
 
 ```{r}
-#| label: plotting plotly
+#| label: plotting plotly 1
 #| warning: false
 #| message: false
 
@@ -39,7 +39,28 @@ config <- yaml::read_yaml("params.yaml")
 config <- yaml::read_yaml("params.yaml")
 
 readRDS(config$evaluate_2_cities_in_month$out$graph_r_obj_plotly)
+
 ```
 
 
+![](graphs/evaluate_2_cities_in_month_1.svg)
+
+```{r}
+#| label: plotting plotly 2
+#| warning: false
+#| message: false
+
+# Configuration
+config <- yaml::read_yaml("params.yaml")
+
+readRDS(config$evaluate_2_cities_in_month_1$out$graph_r_obj_plotly)
+
+```
+
+
+
 ![](graphs/evaluate_decades_means.svg)
+
+
+![](graphs/evaluate_decades_means_botton_10.svg)
+
