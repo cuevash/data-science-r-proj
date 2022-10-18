@@ -7,8 +7,8 @@ stages:
       md5: e3089bf39a26d571b3e3804937c8108e
       size: 4581116
     - path: src/stages/prepare_points.R
-      md5: e3ca069f5b4afa839c3052f119ea8f8a
-      size: 678
+      md5: b35bbe7ac0f959af66bbad4fc64eb6db
+      size: 605
     outs:
     - path: data/processed/worldcities.csv
       md5: 605b6609653f8e9c88ace9dcdfc22cf3
@@ -17,8 +17,8 @@ stages:
     cmd: Rscript src/stages/process.R
     deps:
     - path: data/processed/worldcities.csv
-      md5: cc5ab9d2f3ef2d28c50dd574ec6a8e70
-      size: 224
+      md5: 605b6609653f8e9c88ace9dcdfc22cf3
+      size: 4203
     - path: remote-data/tg_0.1deg_day_2022_grid_ensmean.nc
       md5: 37f499704c4bac26f8ea282c25c6c55a
       size: 239362600
@@ -30,14 +30,14 @@ stages:
       size: 1316
     outs:
     - path: data/processed/climatology_dat.csv
-      md5: ddf2d5cdb7eb999b0b2c490fbbc4d005
-      size: 8835398
+      md5: c3280c82c5ef44f6f39c97390e216a00
+      size: 228394152
   evaluate_2_cities_in_month:
     cmd: Rscript src/stages/evaluate_2_cities_in_month.R
     deps:
     - path: data/processed/climatology_dat.csv
-      md5: ddf2d5cdb7eb999b0b2c490fbbc4d005
-      size: 8835398
+      md5: c3280c82c5ef44f6f39c97390e216a00
+      size: 228394152
     - path: src/stages/evaluate_2_cities_in_month.R
       md5: a06d5ceacb3aabed1c51de887378485b
       size: 3666
@@ -52,9 +52,33 @@ stages:
       md5: a31c8a3e41c421ac64efe50da843202b
       size: 25446
     - path: graphs/evaluate_2_cities_in_month_plotly
-      md5: e4d2767ccb1368145808025de0a7a057.dir
-      size: 4422406
+      md5: 6d5a1cf58a52e681352bcc8a538bd8c1.dir
+      size: 4422410
       nfiles: 17
     - path: graphs/evaluate_2_cities_in_month_plotly.rds
-      md5: 2c6e0bebb93288c829fc5f303e968a0b
-      size: 839121
+      md5: 83b67107ae3df9d2f8aea731d74ecaf1
+      size: 16497347
+  generate_web:
+    cmd: quarto render climatology_web.qmd
+    deps:
+    - path: climatology_web.qmd
+      md5: fe02832537c9f3ba88df838f1fa621b1
+      size: 1128
+    outs:
+    - path: _site
+      md5: f9bde50ac3692efe78959bb11ef9fba1.dir
+      size: 5261632
+      nfiles: 36
+  evaluate_decades_means:
+    cmd: Rscript src/stages/evaluate_decades_means.R
+    deps:
+    - path: data/processed/climatology_dat.csv
+      md5: c3280c82c5ef44f6f39c97390e216a00
+      size: 228394152
+    - path: src/stages/evaluate_decades_means.R
+      md5: 0589556da8ea11c305fb7635b359f1b0
+      size: 2565
+    outs:
+    - path: graphs/evaluate_decades_means.svg
+      md5: a15902c582b532245409165d1d3ac7fe
+      size: 9610

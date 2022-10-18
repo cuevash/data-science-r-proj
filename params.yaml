@@ -20,3 +20,19 @@ evaluate_2_cities_in_month:
     graph_file_svg: "graphs/evaluate_2_cities_in_month.svg"
     graph_dir_plotly: "graphs/evaluate_2_cities_in_month_plotly"
     graph_r_obj_plotly: "graphs/evaluate_2_cities_in_month_plotly.rds"
+
+evaluate_decades_means:
+  out:
+    graph_file_svg: "graphs/evaluate_decades_means.svg"
+    #graph_dir_plotly: "graphs/evaluate_decades_means_plotly"
+    #graph_r_obj_plotly: "graphs/evaluate_decades_means.rds"    
+
+generate_web:
+  in:
+    quarto_file: "climatology_web.qmd"
+  out:
+    web_dir: "_site"
+
+
+
+

@@ -10,7 +10,7 @@
 #'    latitude
 #'    longitude
 #'    id          // id that identifies the point (eg: a city name)
-#'
+#' 
 #' @return a sf tibble with the data extracted and id of the coords_sf added to each coordinate point
 #'
 #' @md
@@ -31,6 +31,15 @@ e_obs_lonlat_sf <-
 
 # Find out closest coordinates indexes
 nearest_coords <- sf::st_nearest_feature(coords_sf, e_obs_lonlat_sf)
+coords_in_range_mat <- sf::st_is_within_distance(coords_sf, e_obs_lonlat_sf, dist = 10000, sparse = FALSE)
+
+
+coords_in_range_tiible <- coords_in_range_mat |> 
+  tibble::as_tibble() |>
+  dplyr::rowwise()  |>
+  dplyr::summarise(n_in_range =  sum(c_across(where(is.logical))) )
+
+coords_in_range_sf <- cbind(coords_sf, coords_in_range_tiible)
 
 # Get the values and reverting the longitudes to the original format. Because we will use them to filter the # whole original file
 lon_lat_values <- e_obs_lonlat_sf  |>  
@@ -39,7 +48,15 @@ lon_lat_values <- e_obs_lonlat_sf  |>
   (\(x) list( lon = dplyr::pull(x,longitude), lat = dplyr::pull(x,latitude)))()
    
 # Add closest coords in original format to our set of cities
-coords_ex_sf <- tibble::add_column(coords_sf, lon_in_eobs = lon_lat_values$lon, lat_in_eobs = lon_lat_values$lat)
+coords_ex_sf <- tibble::add_column(coords_in_range_sf, lon_in_eobs = lon_lat_values$lon, lat_in_eobs = lon_lat_values$lat)
+
+# [TODO]: Improve this to control which values are too far to make sense. At the
+# moment we only print out the (hopefully) few values that are out of range
+print("Warning: Out of range points!!")
+coords_ex_sf |>
+  dplyr::filter(n_in_range < 1) |>
+  head() |>
+  print()
 
 # Extract all values for the exact coords choosen
 e_obs_processed_sf <- coords_ex_sf$id |> 

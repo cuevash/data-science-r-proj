@@ -53,4 +53,6 @@ if (!"here" %in% installed.packages()) renv::install("here")
 
 if (!"htmltools" %in% installed.packages()) renv::install("htmltools")
 
+svglite
+
 renv::snapshot()

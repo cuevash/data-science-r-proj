@@ -16,9 +16,19 @@ A little disclaimer; the data is an aproximation from the gridded data obtained 
 
 Without more preamble here are the findings:
 
-## Plotting
+## Plottings
 
-![](out/cds_e_obs_spain_cities_story_of_two_cities_july.svg)
+```{r}
+#| label: plotting svg
+#| warning: false
+#| message: false
+
+# Configuration
+config <- yaml::read_yaml("params.yaml")
+
+```
+
+![](graphs/evaluate_2_cities_in_month.svg)
 
 ```{r}
 #| label: plotting plotly
@@ -31,3 +41,5 @@ config <- yaml::read_yaml("params.yaml")
 readRDS(config$evaluate_2_cities_in_month$out$graph_r_obj_plotly)
 ```
 
+
+![](graphs/evaluate_decades_means.svg)

@@ -35,19 +35,23 @@ stages:
     - ${evaluate_2_cities_in_month.out.graph_r_obj_plotly}:
         persist: true
 
-        
-#  plot_2_cities_in_month:
+  generate_web:
+    cmd: quarto render ${generate_web.in.quarto_file}
+    deps:
+    - ${generate_web.in.quarto_file}
+    outs:
+    - ${generate_web.out.web_dir}:
+        persist: true 
 
-
-  # train_model:
-  #   cmd: python src/train_model.py
-  #   deps:
-  #   - config/main.yaml
-  #   - config/model
-  #   - data/processed
-  #   - src/train_model.py
-  #   outs:
-  #   - data/final:
-  #       persist: true
-  #   - models:
-  #       persist: true
+  evaluate_decades_means:
+    cmd: Rscript src/stages/evaluate_decades_means.R
+    deps:
+    - ${process.climatology_data}
+    - src/stages/evaluate_decades_means.R
+    outs:
+    - ${evaluate_decades_means.out.graph_file_svg}:
+        persist: true
+    #- ${evaluate_decades_means.out.graph_dir_plotly}:
+    #    persist: true
+    #- ${evaluate_decades_means.out.graph_r_obj_plotly}:
+    #    persist: true     
