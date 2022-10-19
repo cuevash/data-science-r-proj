@@ -9,7 +9,7 @@
   month_in_study = config$evaluate_decades_means$month
 
   # Summarize by month and prepare Name of columns (for tooltips) 1950 - 1959
-  climatologies_mean_monthly_decade_1950_11959 <- climatologies_europe_eobs_1950_2022_dat_tbbl |>
+  climatologies_mean_monthly_decade_1950_1959 <- climatologies_europe_eobs_1950_2022_dat_tbbl |>
     dplyr::filter(year >= 1950 & year <= 1959) |>
     dplyr::group_by(id, month) |>
     dplyr::summarise(temp_mean_by_month_1950_1959 = mean(t2m_c)) |>
@@ -25,7 +25,7 @@
   ## Add differences by month
   climatologies_mean_diffs_between_decades_top_10 <-
     dplyr::left_join(
-      climatologies_mean_monthly_decade_1950_11959, 
+      climatologies_mean_monthly_decade_1950_1959, 
       climatologies_mean_monthly_decade_2013_2022, 
       by = c("id", "month")
     ) |>
@@ -36,8 +36,9 @@
 
   # Barplot
   plot <- climatologies_mean_diffs_between_decades_top_10 |>
-    dplyr::mutate(name = forcats::fct_reorder(id, diffs_between_decades)) |>
-    ggplot2::ggplot(ggplot2::aes(x=name, y=diffs_between_decades)) +
+    dplyr::mutate(City = forcats::fct_reorder(id, diffs_between_decades)) |>
+    dplyr::mutate("Differences between July temperature mean for 19" = forcats::fct_reorder(id, diffs_between_decades)) |>
+    ggplot2::ggplot(ggplot2::aes(x=City, y=diffs_between_decades)) +
     ggplot2::geom_bar(stat = "identity") +
     ggplot2::coord_flip()
 
