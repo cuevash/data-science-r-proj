@@ -38,8 +38,8 @@
 
   # Barplot
   plot <- climatologies_mean_diffs_between_decades_bottom_10 |>
-    dplyr::mutate(name = forcats::fct_reorder(id, diffs_between_decades, .desc = TRUE)) |>
-    ggplot2::ggplot(ggplot2::aes(x=name, y=diffs_between_decades)) +
+    dplyr::mutate(City = forcats::fct_reorder(id, diffs_between_decades, .desc = TRUE)) |>
+    ggplot2::ggplot(ggplot2::aes(x=City, y=diffs_between_decades)) +
     ggplot2::geom_bar(stat = "identity") +
     ggplot2::coord_flip()
 

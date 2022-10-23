@@ -19,3 +19,10 @@
     summarise(
       sum = sum(c_across(where(is.logical)))
     )
+  
+  
+  df <- tibble(x = 1:3, y = 3:1)
+  
+  df %>% add_column(z = -1:1, w = 0)
+  
+  
