@@ -1,0 +1,4 @@
+outs:
+- md5: d62b83086a0d064a5ffb6c88749a076e
+  size: 5322842701
+  path: tg_ens_mean_0.1deg_reg_v26.0e.nc

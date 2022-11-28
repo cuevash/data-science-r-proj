@@ -1,0 +1,4 @@
+outs:
+- md5: 41207511ea85d9edee635b75966f0ea0
+  size: 9437843
+  path: tg_0.1deg_day_2022_10_grid_ensmean.nc
