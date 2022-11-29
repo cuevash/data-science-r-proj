@@ -1,0 +1,31 @@
+stages:
+
+  download_e_obs_file_main:
+    cmd: wget ${raw_files.e_obs_file_main_https_dir}/${raw_files.e_obs_file_main} -O ${root_dir}/data/raw/${raw_files.e_obs_file_main}
+    params:
+      - raw_files
+      - root_dir
+    outs:
+    - ${root_dir}/data/raw/${raw_files.e_obs_file_main}:
+        persist: true
+
+  download_e_obs_monthly_latest_files:
+    foreach: ${raw_files.e_obs_files_latest_monthly}
+    do:
+      cmd: wget ${raw_files.e_obs_files_latest_monthly_https_dir}/${item.file} -O ${root_dir}/data/raw/${item.file}
+      outs:
+      - ${root_dir}/data/raw/${item.file}:
+          persist: true
+      params:
+        - raw_files
+        - root_dir
+
+  merge_Netcdf_files:
+    cmd: ncrcat ${root_dir}/data/raw/*.nc -O ${root_dir}/data/processed/e_obs_all_time.nc
+    deps:
+      - ${root_dir}/data/raw
+    params:
+      - root_dir
+    outs:
+    - ${root_dir}/data/processed/e_obs_all_time.nc:
+        persist: true

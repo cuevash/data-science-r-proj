@@ -1,0 +1,152 @@
+schema: '2.0'
+stages:
+  download_e_obs_monthly_latest_files:
+    cmd: wget https://knmi-ecad-assets-prd.s3.amazonaws.com/ensembles/data/months/ens/tg_0.1deg_day_2022_07_grid_ensmean.nc
+      -O ./../../../data/raw/tg_0.1deg_day_2022_07_grid_ensmean.nc
+    outs:
+    - path: ./../../../data/raw/tg_0.1deg_day_2022_07_grid_ensmean.nc
+      md5: 16911dcecc6415d1ae33b7825c056cba
+      size: 9523457
+  download_e_obs_monthly_latest_files_2@1:
+    cmd: wget https://knmi-ecad-assets-prd.s3.amazonaws.com/ensembles/data/months/ens/tg_0.1deg_day_2022_09_grid_ensmean.nc
+      -O ./../../../data/raw/tg_0.1deg_day_2022_09_grid_ensmean.nc
+    params:
+      params.yaml:
+        raw_files:
+          file_test_hhtps_dir: https://knmi-ecad-assets-prd.s3.amazonaws.com/ensembles/data/months/ens
+          file_test: tg_0.1deg_day_2022_07_grid_ensmean.nc
+          e_obs_file_main: https://knmi-ecad-assets-prd.s3.amazonaws.com/ensembles/data/Grid_0.1deg_reg_ensemble/tg_ens_mean_0.1deg_reg_v26.0e.nc
+          e_obs_files_latest_monthly_https_dir: https://knmi-ecad-assets-prd.s3.amazonaws.com/ensembles/data/months/ens
+          e_obs_files_latest_monthly:
+          - file: tg_0.1deg_day_2022_08_grid_ensmean.nc
+          - file: tg_0.1deg_day_2022_09_grid_ensmean.nc
+    outs:
+    - path: ./../../../data/raw/tg_0.1deg_day_2022_09_grid_ensmean.nc
+      md5: d5256051b5c09dc3c47c3f9c3b187e29
+      size: 9294782
+  download_e_obs_monthly_latest_files_2@0:
+    cmd: wget https://knmi-ecad-assets-prd.s3.amazonaws.com/ensembles/data/months/ens/tg_0.1deg_day_2022_08_grid_ensmean.nc
+      -O ./../../../data/raw/tg_0.1deg_day_2022_08_grid_ensmean.nc
+    params:
+      params.yaml:
+        raw_files:
+          file_test_hhtps_dir: https://knmi-ecad-assets-prd.s3.amazonaws.com/ensembles/data/months/ens
+          file_test: tg_0.1deg_day_2022_07_grid_ensmean.nc
+          e_obs_file_main: https://knmi-ecad-assets-prd.s3.amazonaws.com/ensembles/data/Grid_0.1deg_reg_ensemble/tg_ens_mean_0.1deg_reg_v26.0e.nc
+          e_obs_files_latest_monthly_https_dir: https://knmi-ecad-assets-prd.s3.amazonaws.com/ensembles/data/months/ens
+          e_obs_files_latest_monthly:
+          - file: tg_0.1deg_day_2022_08_grid_ensmean.nc
+          - file: tg_0.1deg_day_2022_09_grid_ensmean.nc
+    outs:
+    - path: ./../../../data/raw/tg_0.1deg_day_2022_08_grid_ensmean.nc
+      md5: 9f19a40750c88eb0af851dbf9762656d
+      size: 9493695
+  download_e_obs_monthly_latest_files@1:
+    cmd: wget https://knmi-ecad-assets-prd.s3.amazonaws.com/ensembles/data/months/ens/tg_0.1deg_day_2022_08_grid_ensmean.nc
+      -O ./../../../data/raw/tg_0.1deg_day_2022_08_grid_ensmean.nc
+    params:
+      params.yaml:
+        raw_files:
+          e_obs_file_main_https_dir: https://knmi-ecad-assets-prd.s3.amazonaws.com/ensembles/data/Grid_0.1deg_reg_ensemble
+          e_obs_file_main: tg_ens_mean_0.1deg_reg_v26.0e.nc
+          e_obs_files_latest_monthly_https_dir: https://knmi-ecad-assets-prd.s3.amazonaws.com/ensembles/data/months/ens
+          e_obs_files_latest_monthly:
+          - file: tg_0.1deg_day_2022_07_grid_ensmean.nc
+          - file: tg_0.1deg_day_2022_08_grid_ensmean.nc
+          - file: tg_0.1deg_day_2022_09_grid_ensmean.nc
+          - file: tg_0.1deg_day_2022_10_grid_ensmean.nc
+        root_dir: ./../../..
+    outs:
+    - path: ./../../../data/raw/tg_0.1deg_day_2022_08_grid_ensmean.nc
+      md5: 9f19a40750c88eb0af851dbf9762656d
+      size: 9493695
+  download_e_obs_monthly_latest_files@0:
+    cmd: wget https://knmi-ecad-assets-prd.s3.amazonaws.com/ensembles/data/months/ens/tg_0.1deg_day_2022_07_grid_ensmean.nc
+      -O ./../../../data/raw/tg_0.1deg_day_2022_07_grid_ensmean.nc
+    params:
+      params.yaml:
+        raw_files:
+          e_obs_file_main_https_dir: https://knmi-ecad-assets-prd.s3.amazonaws.com/ensembles/data/Grid_0.1deg_reg_ensemble
+          e_obs_file_main: tg_ens_mean_0.1deg_reg_v26.0e.nc
+          e_obs_files_latest_monthly_https_dir: https://knmi-ecad-assets-prd.s3.amazonaws.com/ensembles/data/months/ens
+          e_obs_files_latest_monthly:
+          - file: tg_0.1deg_day_2022_07_grid_ensmean.nc
+          - file: tg_0.1deg_day_2022_08_grid_ensmean.nc
+          - file: tg_0.1deg_day_2022_09_grid_ensmean.nc
+          - file: tg_0.1deg_day_2022_10_grid_ensmean.nc
+        root_dir: ./../../..
+    outs:
+    - path: ./../../../data/raw/tg_0.1deg_day_2022_07_grid_ensmean.nc
+      md5: 16911dcecc6415d1ae33b7825c056cba
+      size: 9523457
+  download_e_obs_file_main:
+    cmd: wget https://knmi-ecad-assets-prd.s3.amazonaws.com/ensembles/data/Grid_0.1deg_reg_ensemble/tg_ens_mean_0.1deg_reg_v26.0e.nc
+      -O ./../../../data/raw/tg_ens_mean_0.1deg_reg_v26.0e.nc
+    params:
+      params.yaml:
+        raw_files:
+          e_obs_file_main_https_dir: https://knmi-ecad-assets-prd.s3.amazonaws.com/ensembles/data/Grid_0.1deg_reg_ensemble
+          e_obs_file_main: tg_ens_mean_0.1deg_reg_v26.0e.nc
+          e_obs_files_latest_monthly_https_dir: https://knmi-ecad-assets-prd.s3.amazonaws.com/ensembles/data/months/ens
+          e_obs_files_latest_monthly:
+          - file: tg_0.1deg_day_2022_07_grid_ensmean.nc
+          - file: tg_0.1deg_day_2022_08_grid_ensmean.nc
+          - file: tg_0.1deg_day_2022_09_grid_ensmean.nc
+          - file: tg_0.1deg_day_2022_10_grid_ensmean.nc
+        root_dir: ./../../..
+    outs:
+    - path: ./../../../data/raw/tg_ens_mean_0.1deg_reg_v26.0e.nc
+      md5: d62b83086a0d064a5ffb6c88749a076e
+      size: 5322842701
+  download_e_obs_monthly_latest_files@2:
+    cmd: wget https://knmi-ecad-assets-prd.s3.amazonaws.com/ensembles/data/months/ens/tg_0.1deg_day_2022_09_grid_ensmean.nc
+      -O ./../../../data/raw/tg_0.1deg_day_2022_09_grid_ensmean.nc
+    params:
+      params.yaml:
+        raw_files:
+          e_obs_file_main_https_dir: https://knmi-ecad-assets-prd.s3.amazonaws.com/ensembles/data/Grid_0.1deg_reg_ensemble
+          e_obs_file_main: tg_ens_mean_0.1deg_reg_v26.0e.nc
+          e_obs_files_latest_monthly_https_dir: https://knmi-ecad-assets-prd.s3.amazonaws.com/ensembles/data/months/ens
+          e_obs_files_latest_monthly:
+          - file: tg_0.1deg_day_2022_07_grid_ensmean.nc
+          - file: tg_0.1deg_day_2022_08_grid_ensmean.nc
+          - file: tg_0.1deg_day_2022_09_grid_ensmean.nc
+          - file: tg_0.1deg_day_2022_10_grid_ensmean.nc
+        root_dir: ./../../..
+    outs:
+    - path: ./../../../data/raw/tg_0.1deg_day_2022_09_grid_ensmean.nc
+      md5: d5256051b5c09dc3c47c3f9c3b187e29
+      size: 9294782
+  download_e_obs_monthly_latest_files@3:
+    cmd: wget https://knmi-ecad-assets-prd.s3.amazonaws.com/ensembles/data/months/ens/tg_0.1deg_day_2022_10_grid_ensmean.nc
+      -O ./../../../data/raw/tg_0.1deg_day_2022_10_grid_ensmean.nc
+    params:
+      params.yaml:
+        raw_files:
+          e_obs_file_main_https_dir: https://knmi-ecad-assets-prd.s3.amazonaws.com/ensembles/data/Grid_0.1deg_reg_ensemble
+          e_obs_file_main: tg_ens_mean_0.1deg_reg_v26.0e.nc
+          e_obs_files_latest_monthly_https_dir: https://knmi-ecad-assets-prd.s3.amazonaws.com/ensembles/data/months/ens
+          e_obs_files_latest_monthly:
+          - file: tg_0.1deg_day_2022_07_grid_ensmean.nc
+          - file: tg_0.1deg_day_2022_08_grid_ensmean.nc
+          - file: tg_0.1deg_day_2022_09_grid_ensmean.nc
+          - file: tg_0.1deg_day_2022_10_grid_ensmean.nc
+        root_dir: ./../../..
+    outs:
+    - path: ./../../../data/raw/tg_0.1deg_day_2022_10_grid_ensmean.nc
+      md5: 41207511ea85d9edee635b75966f0ea0
+      size: 9437843
+  merge_Netcdf_files:
+    cmd: ncrcat ./../../../data/raw/*.nc -O ./../../../data/processed/e_obs_all_time.nc
+    deps:
+    - path: ./../../../data/raw
+      md5: 81f06706450b1bd9f5344dc135a651ee.dir
+      size: 5365179932
+      nfiles: 8
+    params:
+      params.yaml:
+        root_dir: ./../../..
+    outs:
+    - path: ./../../../data/processed/e_obs_all_time.nc
+      md5: dbe076915e74604cbdfbaa2f8b560ac8
+      size: 4460746688

@@ -1,0 +1,13 @@
+root_dir: ./../../..
+
+raw_files:
+  e_obs_file_main_https_dir: https://knmi-ecad-assets-prd.s3.amazonaws.com/ensembles/data/Grid_0.1deg_reg_ensemble
+  e_obs_file_main: tg_ens_mean_0.1deg_reg_v26.0e.nc
+
+  e_obs_files_latest_monthly_https_dir: https://knmi-ecad-assets-prd.s3.amazonaws.com/ensembles/data/months/ens
+  e_obs_files_latest_monthly:
+    - file: tg_0.1deg_day_2022_07_grid_ensmean.nc
+    - file: tg_0.1deg_day_2022_08_grid_ensmean.nc
+    - file: tg_0.1deg_day_2022_09_grid_ensmean.nc
+    - file: tg_0.1deg_day_2022_10_grid_ensmean.nc
+  
