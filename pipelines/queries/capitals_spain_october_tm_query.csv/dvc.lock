@@ -1,0 +1,20 @@
+schema: '2.0'
+stages:
+  capitals_spain_october_tm_query.csv:
+    cmd:
+    - mkdir -p data/queries/
+    - Rscript src/modules/select_capitals_spain_month_tm.R pipelines/queries/capitals_spain_october_tm_query.csv/params.yaml
+    deps:
+    - path: data/processed/e_obs_provinces_capitals_spain.csv
+      md5: 11b4c07053ba0ed2d2905f29b2c3e231
+      size: 217775177
+    params:
+      pipelines/queries/capitals_spain_october_tm_query.csv/params.yaml:
+        e_obs_coords_file: data/processed/e_obs_provinces_capitals_spain.csv
+        month: 10
+        out_file: data/queries/capitals_spain_october_tm_query.csv
+        root_dir: ./../../..
+    outs:
+    - path: data/queries/capitals_spain_october_tm_query.csv
+      md5: acc9b44dfd4e4ab969a1e4a0757f94bd
+      size: 1487538

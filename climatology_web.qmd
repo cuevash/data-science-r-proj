@@ -63,4 +63,11 @@ readRDS(config$evaluate_2_cities_in_month_1$out$graph_r_obj_plotly)
 
 
 ![](graphs/evaluate_decades_means_botton_10.svg)
+```{r}
+#| label: plotting october in Madrid through the years
+#| warning: false
+#| message: false
 
+
+
+```

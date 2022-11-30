@@ -2,7 +2,9 @@
 stages:
 
   capitals_spain_october_tm_query.csv:
-    cmd: Rscript src/modules/select_capitals_spain_month_tm.R pipelines/queries/capitals_spain_october_tm_query.csv/params.yaml
+    cmd: 
+      - mkdir -p data/queries/ 
+      - Rscript src/modules/select_capitals_spain_month_tm.R pipelines/queries/capitals_spain_october_tm_query.csv/params.yaml
     wdir: ${root_dir}
     deps:
     - ${e_obs_coords_file}
