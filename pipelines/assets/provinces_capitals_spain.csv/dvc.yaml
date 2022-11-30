@@ -1,3 +1,17 @@
+# Create a file with only the capitals cities of the provinces of spain.
 
+stages:
+
+  provinces_capitals_spain.csv:
+    cmd: Rscript src/modules/select_provinces_capital_spain.R pipelines/assets/provinces_capitals_spain.csv/params.yaml
+    wdir: ${root_dir}
+    deps:
+    - data/processed/cities/all/worldcities.csv
+    - src/modules/select_provinces_capital_spain.R
+    params:
+      - pipelines/assets/e_obs_all_time.csv/params.yaml:
+    outs:
+    - data/processed/cities/provinces_capitals_spain.csv:
+        persist: true
 
 

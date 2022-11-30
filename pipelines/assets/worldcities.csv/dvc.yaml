@@ -1,5 +1,3 @@
-# Create a file with only the capitals cities of the provinces of spain.
-
 stages:
 
   download_worldcities_zip:

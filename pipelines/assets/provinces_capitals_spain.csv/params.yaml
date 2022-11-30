@@ -1,1 +1,8 @@
 root_dir: ./../../..
+
+cities_all_file: "data/processed/cities/all/worldcities.csv"
+cities_out_file: "data/processed/cities/provinces_capitals_spain.csv"
+
+# Cities to exclude because there is not reliable information on the gridded data. The closest
+# grid points are too far away.
+cities_exclude: ["Las Palmas", "Santa Cruz", "Cádiz"]

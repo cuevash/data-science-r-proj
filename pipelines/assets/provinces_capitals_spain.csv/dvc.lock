@@ -1,0 +1,18 @@
+schema: '2.0'
+stages:
+  provinces_capitals_spain.csv:
+    cmd: Rscript src/modules/select_provinces_capital_spain.R pipelines/assets/provinces_capitals_spain.csv/params.yaml
+    deps:
+    - path: data/processed/cities/all/worldcities.csv
+      md5: e3089bf39a26d571b3e3804937c8108e
+      size: 4581116
+    - path: src/modules/select_provinces_capital_spain.R
+      md5: b39afd1b85f3c47930dba9021c121817
+      size: 725
+    params:
+      pipelines/assets/e_obs_all_time.csv/params.yaml:
+        root_dir: ./../../..
+    outs:
+    - path: data/processed/cities/provinces_capitals_spain.csv
+      md5: f930976671d21c1380c5a8fd37bf69be
+      size: 3952
