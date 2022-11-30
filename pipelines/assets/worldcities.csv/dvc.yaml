@@ -1,3 +1,5 @@
+# Create a file with only the capitals cities of the provinces of spain.
+
 stages:
 
   download_worldcities_zip:
@@ -12,13 +14,13 @@ stages:
 
   unzip_worldcities_zip:
     cmd:
-      - mkdir -p ${root_dir}/data/processed/cities/ 
-      - unzip ${root_dir}/data/raw/cities/simplemaps_worldcities_basicv1.75.zip -d ${root_dir}/data/processed/cities/
+      - mkdir -p ${root_dir}/data/processed/cities/all 
+      - rm ${root_dir}/data/processed/cities/all/*
+      - unzip ${root_dir}/data/raw/cities/simplemaps_worldcities_basicv1.75.zip -d ${root_dir}/data/processed/cities/all/
     deps:
     - ${root_dir}/data/raw/cities/simplemaps_worldcities_basicv1.75.zip
     params:
       - root_dir
     outs:
-    - ${root_dir}/data/processed/cities:
+    - ${root_dir}/data/processed/cities/all/:
         persist: true
-

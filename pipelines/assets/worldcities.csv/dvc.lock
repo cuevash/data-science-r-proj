@@ -14,8 +14,9 @@ stages:
       size: 4390984
   unzip_worldcities_zip:
     cmd:
-    - mkdir -p ./../../../data/processed/cities/
-    - unzip ./../../../data/raw/cities/simplemaps_worldcities_basicv1.75.zip -d ./../../../data/processed/cities/
+    - mkdir -p ./../../../data/processed/cities/all
+    - rm ./../../../data/processed/cities/all/*
+    - unzip ./../../../data/raw/cities/simplemaps_worldcities_basicv1.75.zip -d ./../../../data/processed/cities/all/
     deps:
     - path: ./../../../data/raw/cities/simplemaps_worldcities_basicv1.75.zip
       md5: 1b73dadc46121246845e8d9e645c65a1
@@ -24,7 +25,7 @@ stages:
       params.yaml:
         root_dir: ./../../..
     outs:
-    - path: ./../../../data/processed/cities
+    - path: ./../../../data/processed/cities/all/
       md5: ad9fcaea607b0d6d424cd16fc730007f.dir
       size: 7536685
       nfiles: 3
