@@ -1,0 +1,5 @@
+root_dir: ./../../..
+
+coords_file: data/processed/cities/provinces_capitals_spain.csv
+e_obs_file: data/processed/e_obs_all_time.nc
+out_file: data/processed/e_obs_provinces_capitals_spain.csv

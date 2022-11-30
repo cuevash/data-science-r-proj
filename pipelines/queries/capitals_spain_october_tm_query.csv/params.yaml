@@ -1,0 +1,5 @@
+root_dir: ./../../..
+
+e_obs_coords_file: data/processed/e_obs_provinces_capitals_spain.csv
+month: 10
+out_file: data/queries/capitals_spain_october_tm_query.csv

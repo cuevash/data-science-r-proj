@@ -1,0 +1,14 @@
+# Create a file with only the capitals cities of the provinces of spain.
+stages:
+
+  capitals_spain_october_tm_query.csv:
+    cmd: Rscript src/modules/select_capitals_spain_month_tm.R pipelines/queries/capitals_spain_october_tm_query.csv/params.yaml
+    wdir: ${root_dir}
+    deps:
+    - ${e_obs_coords_file}
+    params:
+      - pipelines/queries/capitals_spain_october_tm_query.csv/params.yaml:
+    outs:
+    - ${out_file}:
+        persist: true
+

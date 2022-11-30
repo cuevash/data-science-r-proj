@@ -140,13 +140,13 @@ stages:
     cmd: ncrcat ./../../../data/raw/*.nc -O ./../../../data/processed/e_obs_all_time.nc
     deps:
     - path: ./../../../data/raw
-      md5: 81f06706450b1bd9f5344dc135a651ee.dir
-      size: 5365179932
-      nfiles: 8
+      md5: a16af03dd002e8e1383409302bac7744.dir
+      size: 5369570955
+      nfiles: 10
     params:
       params.yaml:
         root_dir: ./../../..
     outs:
     - path: ./../../../data/processed/e_obs_all_time.nc
-      md5: dbe076915e74604cbdfbaa2f8b560ac8
+      md5: e05caf64c6dc3e2708b64f6cd1c01528
       size: 4460746688

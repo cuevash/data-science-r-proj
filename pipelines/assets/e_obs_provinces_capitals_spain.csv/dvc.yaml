@@ -1,0 +1,18 @@
+# Create a file with only the capitals cities of the provinces of spain.
+
+stages:
+
+  e_obs_provinces_capitals_spain.csv:
+    cmd: Rscript src/modules/extract_e_obs_points_for_coords.R pipelines/assets/e_obs_provinces_capitals_spain.csv/params.yaml
+    wdir: ${root_dir}
+    deps:
+    - ${coords_file}
+    - ${e_obs_file}
+    params:
+      - pipelines/assets/e_obs_provinces_capitals_spain.csv/params.yaml:
+    outs:
+    - ${out_file}:
+        persist: true
+
+
+

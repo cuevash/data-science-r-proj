@@ -1,0 +1,21 @@
+schema: '2.0'
+stages:
+  e_obs_provinces_capitals_spain.csv:
+    cmd: Rscript src/modules/extract_e_obs_points_for_coords.R pipelines/assets/e_obs_provinces_capitals_spain.csv/params.yaml
+    deps:
+    - path: data/processed/cities/provinces_capitals_spain.csv
+      md5: f930976671d21c1380c5a8fd37bf69be
+      size: 3952
+    - path: data/processed/e_obs_all_time.nc
+      md5: e05caf64c6dc3e2708b64f6cd1c01528
+      size: 4460746688
+    params:
+      pipelines/assets/e_obs_provinces_capitals_spain.csv/params.yaml:
+        coords_file: data/processed/cities/provinces_capitals_spain.csv
+        e_obs_file: data/processed/e_obs_all_time.nc
+        out_file: data/processed/e_obs_provinces_capitals_spain.csv
+        root_dir: ./../../..
+    outs:
+    - path: data/processed/e_obs_provinces_capitals_spain.csv
+      md5: 11b4c07053ba0ed2d2905f29b2c3e231
+      size: 217775177
