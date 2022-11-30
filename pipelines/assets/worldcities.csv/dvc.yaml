@@ -1,0 +1,24 @@
+stages:
+
+  download_worldcities_zip:
+    cmd: 
+      - mkdir -p ${root_dir}/data/raw/cities/
+      - wget https://simplemaps.com/static/data/world-cities/basic/simplemaps_worldcities_basicv1.75.zip -O ${root_dir}/data/raw/cities/simplemaps_worldcities_basicv1.75.zip
+    params:
+      - root_dir
+    outs:
+    - ${root_dir}/data/raw/cities/simplemaps_worldcities_basicv1.75.zip:
+        persist: true
+
+  unzip_worldcities_zip:
+    cmd:
+      - mkdir -p ${root_dir}/data/processed/cities/ 
+      - unzip ${root_dir}/data/raw/cities/simplemaps_worldcities_basicv1.75.zip -d ${root_dir}/data/processed/cities/
+    deps:
+    - ${root_dir}/data/raw/cities/simplemaps_worldcities_basicv1.75.zip
+    params:
+      - root_dir
+    outs:
+    - ${root_dir}/data/processed/cities:
+        persist: true
+

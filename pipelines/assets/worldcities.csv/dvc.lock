@@ -1,0 +1,30 @@
+schema: '2.0'
+stages:
+  download_worldcities_zip:
+    cmd:
+    - mkdir -p ./../../../data/raw/cities/
+    - wget https://simplemaps.com/static/data/world-cities/basic/simplemaps_worldcities_basicv1.75.zip
+      -O ./../../../data/raw/cities/simplemaps_worldcities_basicv1.75.zip
+    params:
+      params.yaml:
+        root_dir: ./../../..
+    outs:
+    - path: ./../../../data/raw/cities/simplemaps_worldcities_basicv1.75.zip
+      md5: 1b73dadc46121246845e8d9e645c65a1
+      size: 4390984
+  unzip_worldcities_zip:
+    cmd:
+    - mkdir -p ./../../../data/processed/cities/
+    - unzip ./../../../data/raw/cities/simplemaps_worldcities_basicv1.75.zip -d ./../../../data/processed/cities/
+    deps:
+    - path: ./../../../data/raw/cities/simplemaps_worldcities_basicv1.75.zip
+      md5: 1b73dadc46121246845e8d9e645c65a1
+      size: 4390984
+    params:
+      params.yaml:
+        root_dir: ./../../..
+    outs:
+    - path: ./../../../data/processed/cities
+      md5: ad9fcaea607b0d6d424cd16fc730007f.dir
+      size: 7536685
+      nfiles: 3
