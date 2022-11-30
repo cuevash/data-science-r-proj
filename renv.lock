@@ -117,17 +117,6 @@
       "Hash": "e9c08b94391e9f3f97355841229124f2",
       "Requirements": []
     },
-    "RgoogleMaps": {
-      "Package": "RgoogleMaps",
-      "Version": "1.4.5.3",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "bffdcd07380ea0a95228588f8aa93734",
-      "Requirements": [
-        "png",
-        "sp"
-      ]
-    },
     "Rttf2pt1": {
       "Package": "Rttf2pt1",
       "Version": "1.3.11",
@@ -195,14 +184,6 @@
       "Requirements": [
         "bit"
       ]
-    },
-    "bitops": {
-      "Package": "bitops",
-      "Version": "1.0-7",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "b7d8d8ee39869c18d8846a184dd8a1af",
-      "Requirements": []
     },
     "blob": {
       "Package": "blob",
@@ -663,33 +644,6 @@
         "rstudioapi"
       ]
     },
-    "ggmap": {
-      "Package": "ggmap",
-      "Version": "3.0.1",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "c4e0c8c8576ef44121a7447fb6958627",
-      "Requirements": [
-        "RgoogleMaps",
-        "bitops",
-        "cli",
-        "digest",
-        "dplyr",
-        "ggplot2",
-        "glue",
-        "httr",
-        "jpeg",
-        "magrittr",
-        "plyr",
-        "png",
-        "purrr",
-        "rlang",
-        "scales",
-        "stringr",
-        "tibble",
-        "tidyr"
-      ]
-    },
     "ggplot2": {
       "Package": "ggplot2",
       "Version": "3.4.0",
@@ -964,10 +918,10 @@
     },
     "jpeg": {
       "Package": "jpeg",
-      "Version": "0.1-9",
+      "Version": "0.1-10",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "441ee36360a57b363f4fa3df0c364630",
+      "Hash": "031a0b683d001a7519202f0628fc0358",
       "Requirements": []
     },
     "jquerylib": {

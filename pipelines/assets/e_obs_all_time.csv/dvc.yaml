@@ -1,0 +1,13 @@
+stages:
+
+  e_obs_all_time.csv:
+    cmd: Rscript src/modules/convert_e_obs_netcdf_to_csv.R data/processed/e_obs_all_time.nc data/processed/e_obs_all_time.csv/${root_dir}
+    wdir: ${root_dir}
+    deps:
+    - data/processed/e_obs_all_time.nc
+    params:
+      - pipelines/assets/e_obs_all_time.csv/params.yaml:
+          - root_dir   
+    outs:
+    - data/processed/e_obs_all_time.csv:
+        persist: true

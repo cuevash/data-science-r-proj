@@ -29,7 +29,7 @@ if (!"stars" %in% installed.packages()) renv::install("stars")
 
 if (!"maps" %in% installed.packages()) renv::install("maps")
 
-if (!"ggmap" %in% installed.packages()) renv::install("ggmap")
+# if (!"ggmap" %in% installed.packages()) renv::install("ggmap")
 
 if (!"mapview" %in% installed.packages()) renv::install("mapview")
 

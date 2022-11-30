@@ -1,0 +1,16 @@
+schema: '2.0'
+stages:
+  e_obs_all_time.csv:
+    cmd: Rscript src/modules/convert_e_obs_netcdf_to_csv.R data/processed/e_obs_all_time.nc
+      data/processed/e_obs_all_time.csv/./../../..
+    deps:
+    - path: data/processed/e_obs_all_time.nc
+      md5: dbe076915e74604cbdfbaa2f8b560ac8
+      size: 4460746688
+    params:
+      pipelines/assets/e_obs_all_time.csv/params.yaml:
+        root_dir: ./../../..
+    outs:
+    - path: data/processed/e_obs_all_time.csv
+      md5: cdafa6719bb30e7ce7249a0af2d03b6b
+      size: 10458328
